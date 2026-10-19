@@ -1,0 +1,52 @@
+﻿{
+    "equipo":  "LAPTOP-FTEDSQ1E",
+    "fecha":  "2026-10-18 20:49:09",
+    "servicios":  [
+                      {
+                          "servicio":  "RDP",
+                          "habilitado":  false,
+                          "puerto":  3389,
+                          "autenticacion":  "NLA habilitado",
+                          "reglas_firewall":  [
+
+                                              ]
+                      },
+                      {
+                          "servicio":  "WinRM",
+                          "habilitado":  false,
+                          "puerto":  "5985/5986",
+                          "autenticacion":  "Configuracion pendiente de analisis",
+                          "reglas_firewall":  [
+
+                                              ]
+                      },
+                      {
+                          "servicio":  "OpenSSH",
+                          "habilitado":  false,
+                          "puerto":  22,
+                          "autenticacion":  "Configuracion pendiente de analisis",
+                          "reglas_firewall":  [
+
+                                              ]
+                      }
+                  ],
+    "firewall":  [
+                     {
+                         "nombre":  "Domain",
+                         "habilitado":  true
+                     },
+                     {
+                         "nombre":  "Private",
+                         "habilitado":  true
+                     },
+                     {
+                         "nombre":  "Public",
+                         "habilitado":  true
+                     }
+                 ],
+    "politica_bloqueo":  {
+                             "umbral_bloqueo":  "Nunca",
+                             "duracion_bloqueo_minutos":  "30",
+                             "ventana_observacion_minutos":  "30"
+                         }
+}
