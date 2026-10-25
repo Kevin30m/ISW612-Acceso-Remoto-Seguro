@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Acceso Remoto Seguro - ISW-612</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Auditor de Acceso Remoto Seguro</h1>
+        <p>Proyecto ISW-612 - Tema 6</p>
+    </header>
+
+    <main>
+
+        <section class="card">
+            <h2>Cargar archivo JSON</h2>
+
+            <p>
+                Seleccione el archivo generado por el script
+                auditor-acceso-remoto.ps1.
+            </p>
+
+            <input
+                type="file"
+                id="archivoJSON"
+                accept=".json"
+            >
+        </section>
+
+
+        <section class="card">
+            <h2>Información del equipo</h2>
+
+            <p>
+                <strong>Equipo:</strong>
+                <span id="equipo">Sin datos</span>
+            </p>
+
+            <p>
+                <strong>Fecha de auditoría:</strong>
+                <span id="fecha">Sin datos</span>
+            </p>
+        </section>
+
+
+        <section class="card">
+            <h2>Puntaje de seguridad</h2>
+
+            <div id="puntaje">
+                0 / 100
+            </div>
+        </section>
+
+
+        <section class="card">
+            <h2>Servicios de acceso remoto</h2>
+
+            <div id="servicios">
+                <p>No se ha cargado ningún archivo JSON.</p>
+            </div>
+        </section>
+
+
+        <section class="card">
+            <h2>Política de bloqueo</h2>
+
+            <div id="politicaBloqueo">
+                <p>Sin información.</p>
+            </div>
+        </section>
+
+
+        <section class="card">
+            <h2>Firewall de Windows</h2>
+
+            <div id="firewall">
+                <p>Sin información.</p>
+            </div>
+        </section>
+
+
+        <section class="card">
+            <h2>Recomendaciones</h2>
+
+            <div id="recomendaciones">
+                <p>
+                    Cargue un archivo JSON para obtener recomendaciones
+                    de seguridad.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>
+            Kevin Urbina - Luis Alonso Huertas
+            | ISW-612
+        </p>
+    </footer>
+
+
+    <script src="js/app.js"></script>
+
+</body>
+</html>
