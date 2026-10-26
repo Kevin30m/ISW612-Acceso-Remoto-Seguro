@@ -1,0 +1,81 @@
+﻿{
+    "equipo":  "W11-KUR",
+    "fecha":  "2026-10-26 10:14:08",
+    "servicios":  [
+                      {
+                          "servicio":  "RDP",
+                          "habilitado":  false,
+                          "puerto":  3389,
+                          "autenticacion":  "NLA habilitado",
+                          "reglas_firewall":  [
+                                                  {
+                                                      "DisplayName":  "Escritorio remoto (TCP-WS-in)",
+                                                      "Enabled":  2,
+                                                      "Direction":  1,
+                                                      "Action":  2
+                                                  },
+                                                  {
+                                                      "DisplayName":  "Escritorio remoto (TCP-WSS de entrada)",
+                                                      "Enabled":  2,
+                                                      "Direction":  1,
+                                                      "Action":  2
+                                                  },
+                                                  {
+                                                      "DisplayName":  "Escritorio remoto - instantánea (TCP de entrada)",
+                                                      "Enabled":  2,
+                                                      "Direction":  1,
+                                                      "Action":  2
+                                                  },
+                                                  {
+                                                      "DisplayName":  "Escritorio remoto - Modo usuario (TCP de entrada)",
+                                                      "Enabled":  2,
+                                                      "Direction":  1,
+                                                      "Action":  2
+                                                  },
+                                                  {
+                                                      "DisplayName":  "Escritorio remoto - Modo usuario (UDP de entrada)",
+                                                      "Enabled":  2,
+                                                      "Direction":  1,
+                                                      "Action":  2
+                                                  }
+                                              ]
+                      },
+                      {
+                          "servicio":  "WinRM",
+                          "habilitado":  false,
+                          "puerto":  "5985/5986",
+                          "autenticacion":  "Configuracion pendiente de analisis",
+                          "reglas_firewall":  [
+
+                                              ]
+                      },
+                      {
+                          "servicio":  "OpenSSH",
+                          "habilitado":  false,
+                          "puerto":  22,
+                          "autenticacion":  "Configuracion pendiente de analisis",
+                          "reglas_firewall":  [
+
+                                              ]
+                      }
+                  ],
+    "firewall":  [
+                     {
+                         "nombre":  "Domain",
+                         "habilitado":  true
+                     },
+                     {
+                         "nombre":  "Private",
+                         "habilitado":  true
+                     },
+                     {
+                         "nombre":  "Public",
+                         "habilitado":  true
+                     }
+                 ],
+    "politica_bloqueo":  {
+                             "umbral_bloqueo":  "10",
+                             "duracion_bloqueo_minutos":  "10",
+                             "ventana_observacion_minutos":  "10"
+                         }
+}

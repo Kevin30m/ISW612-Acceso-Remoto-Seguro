@@ -1,6 +1,6 @@
 ﻿{
-    "equipo":  "LAPTOP-FTEDSQ1E",
-    "fecha":  "2026-10-18 20:49:09",
+    "equipo":  "W11-KUR",
+    "fecha":  "2026-10-26 10:44:29",
     "servicios":  [
                       {
                           "servicio":  "RDP",
@@ -8,7 +8,36 @@
                           "puerto":  3389,
                           "autenticacion":  "NLA habilitado",
                           "reglas_firewall":  [
-
+                                                  {
+                                                      "DisplayName":  "Escritorio remoto (TCP-WS-in)",
+                                                      "Enabled":  2,
+                                                      "Direction":  1,
+                                                      "Action":  2
+                                                  },
+                                                  {
+                                                      "DisplayName":  "Escritorio remoto (TCP-WSS de entrada)",
+                                                      "Enabled":  2,
+                                                      "Direction":  1,
+                                                      "Action":  2
+                                                  },
+                                                  {
+                                                      "DisplayName":  "Escritorio remoto - instantánea (TCP de entrada)",
+                                                      "Enabled":  2,
+                                                      "Direction":  1,
+                                                      "Action":  2
+                                                  },
+                                                  {
+                                                      "DisplayName":  "Escritorio remoto - Modo usuario (TCP de entrada)",
+                                                      "Enabled":  2,
+                                                      "Direction":  1,
+                                                      "Action":  2
+                                                  },
+                                                  {
+                                                      "DisplayName":  "Escritorio remoto - Modo usuario (UDP de entrada)",
+                                                      "Enabled":  2,
+                                                      "Direction":  1,
+                                                      "Action":  2
+                                                  }
                                               ]
                       },
                       {
@@ -45,8 +74,8 @@
                      }
                  ],
     "politica_bloqueo":  {
-                             "umbral_bloqueo":  "Nunca",
-                             "duracion_bloqueo_minutos":  "30",
-                             "ventana_observacion_minutos":  "30"
+                             "umbral_bloqueo":  "5",
+                             "duracion_bloqueo_minutos":  "15",
+                             "ventana_observacion_minutos":  "10"
                          }
 }
