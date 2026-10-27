@@ -8,6 +8,7 @@ const firewallElemento = document.getElementById("firewall");
 const recomendacionesElemento = document.getElementById("recomendaciones");
 const puntajeElemento = document.getElementById("puntaje");
 
+
 inputArchivo.addEventListener("change", function (event) {
 
     const archivo = event.target.files[0];
@@ -46,13 +47,23 @@ inputArchivo.addEventListener("change", function (event) {
 });
 
 
+// =====================================================
+// INFORMACIÓN GENERAL DEL EQUIPO
+// =====================================================
+
 function mostrarInformacion(datos) {
 
-    equipoElemento.textContent = datos.equipo || "No disponible";
+    equipoElemento.textContent =
+        datos.equipo || "No disponible";
 
-    fechaElemento.textContent = datos.fecha || "No disponible";
+    fechaElemento.textContent =
+        datos.fecha || "No disponible";
 }
 
+
+// =====================================================
+// SERVICIOS DE ACCESO REMOTO
+// =====================================================
 
 function mostrarServicios(servicios) {
 
@@ -68,7 +79,8 @@ function mostrarServicios(servicios) {
 
     servicios.forEach(function (servicio) {
 
-        const contenedor = document.createElement("div");
+        const contenedor =
+            document.createElement("div");
 
         contenedor.classList.add("servicio");
 
@@ -109,6 +121,10 @@ function mostrarServicios(servicios) {
 }
 
 
+// =====================================================
+// POLÍTICA DE BLOQUEO
+// =====================================================
+
 function mostrarPoliticaBloqueo(politica) {
 
     if (!politica) {
@@ -138,6 +154,10 @@ function mostrarPoliticaBloqueo(politica) {
 }
 
 
+// =====================================================
+// FIREWALL
+// =====================================================
+
 function mostrarFirewall(firewall) {
 
     firewallElemento.innerHTML = "";
@@ -166,11 +186,16 @@ function mostrarFirewall(firewall) {
 }
 
 
+// =====================================================
+// CÁLCULO DEL PUNTAJE
+// =====================================================
+
 function calcularPuntaje(datos) {
 
     let puntaje = 0;
 
     const recomendaciones = [];
+
 
     const rdp = datos.servicios.find(
         servicio => servicio.servicio === "RDP"
@@ -185,10 +210,10 @@ function calcularPuntaje(datos) {
     );
 
 
-    // ---------------------------------
-    // RDP + NLA
+    // =====================================================
+    // 1. RDP + NLA
     // Máximo: 25 puntos
-    // ---------------------------------
+    // =====================================================
 
     if (rdp) {
 
@@ -208,10 +233,10 @@ function calcularPuntaje(datos) {
     }
 
 
-    // ---------------------------------
-    // Firewall
+    // =====================================================
+    // 2. FIREWALL DE WINDOWS
     // Máximo: 25 puntos
-    // ---------------------------------
+    // =====================================================
 
     if (datos.firewall) {
 
@@ -220,45 +245,153 @@ function calcularPuntaje(datos) {
                 perfil => perfil.habilitado === true
             ).length;
 
+
         if (perfilesActivos === 3) {
 
             puntaje += 25;
 
         } else {
 
+            puntaje += perfilesActivos * 8;
+
             recomendaciones.push(
-                "Mantener habilitados todos los perfiles del Firewall de Windows."
+                "Mantener habilitados los perfiles Domain, Private y Public del Firewall de Windows."
             );
         }
     }
 
 
-    // ---------------------------------
-    // Política de bloqueo
+    // =====================================================
+    // 3. POLÍTICA DE BLOQUEO
     // Máximo: 30 puntos
-    // ---------------------------------
+    // =====================================================
 
     if (datos.politica_bloqueo) {
 
+        const politica =
+            datos.politica_bloqueo;
+
+
+        const umbral =
+            parseInt(
+                politica.umbral_bloqueo
+            );
+
+
+        const duracion =
+            parseInt(
+                politica.duracion_bloqueo_minutos
+            );
+
+
+        const ventana =
+            parseInt(
+                politica.ventana_observacion_minutos
+            );
+
+
+        // -------------------------------------------------
+        // UMBRAL DE BLOQUEO
+        // Máximo: 15 puntos
+        // -------------------------------------------------
+
         if (
-            datos.politica_bloqueo.umbral_bloqueo !== "Nunca"
+            politica.umbral_bloqueo === "Nunca" ||
+            isNaN(umbral)
         ) {
 
-            puntaje += 30;
+            recomendaciones.push(
+                "Configurar un umbral de bloqueo para limitar los intentos fallidos."
+            );
+
+        } else if (umbral <= 5) {
+
+            puntaje += 15;
+
+        } else if (umbral <= 10) {
+
+            puntaje += 8;
+
+            recomendaciones.push(
+                "Reducir el umbral de bloqueo a 5 intentos para aumentar la protección contra fuerza bruta."
+            );
+
+        } else {
+
+            puntaje += 4;
+
+            recomendaciones.push(
+                "El umbral de bloqueo es alto. Se recomienda reducir la cantidad de intentos permitidos."
+            );
+        }
+
+
+        // -------------------------------------------------
+        // DURACIÓN DEL BLOQUEO
+        // Máximo: 10 puntos
+        // -------------------------------------------------
+
+        if (!isNaN(duracion)) {
+
+            if (duracion >= 15) {
+
+                puntaje += 10;
+
+            } else if (duracion >= 10) {
+
+                puntaje += 5;
+
+                recomendaciones.push(
+                    "Aumentar la duración del bloqueo a por lo menos 15 minutos."
+                );
+
+            } else {
+
+                recomendaciones.push(
+                    "La duración del bloqueo es baja. Se recomienda aumentar el tiempo de bloqueo."
+                );
+            }
+        }
+
+
+        // -------------------------------------------------
+        // VENTANA DE OBSERVACIÓN
+        // Máximo: 5 puntos
+        // -------------------------------------------------
+
+        if (
+            !isNaN(ventana) &&
+            ventana <= 15
+        ) {
+
+            puntaje += 5;
 
         } else {
 
             recomendaciones.push(
-                "Configurar un umbral de bloqueo de cuenta después de varios intentos fallidos."
+                "Revisar la ventana de observación de intentos fallidos."
             );
         }
+
+
+    } else {
+
+        recomendaciones.push(
+            "No se encontró información sobre la política de bloqueo."
+        );
     }
 
 
-    // ---------------------------------
-    // Servicios innecesarios
+    // =====================================================
+    // 4. SERVICIOS DE ACCESO REMOTO
     // Máximo: 20 puntos
-    // ---------------------------------
+    // =====================================================
+
+
+    // -----------------------------------------------------
+    // WinRM
+    // Máximo: 10 puntos
+    // -----------------------------------------------------
 
     if (winrm && !winrm.habilitado) {
 
@@ -267,10 +400,15 @@ function calcularPuntaje(datos) {
     } else if (winrm && winrm.habilitado) {
 
         recomendaciones.push(
-            "Revisar la configuración de WinRM y mantenerlo habilitado solo si es necesario."
+            "Revisar la configuración de WinRM y mantenerlo habilitado solo cuando sea necesario."
         );
     }
 
+
+    // -----------------------------------------------------
+    // OpenSSH
+    // Máximo: 10 puntos
+    // -----------------------------------------------------
 
     if (ssh && !ssh.habilitado) {
 
@@ -279,40 +417,66 @@ function calcularPuntaje(datos) {
     } else if (ssh && ssh.habilitado) {
 
         recomendaciones.push(
-            "Revisar la configuración de OpenSSH y utilizar autenticación segura."
+            "Revisar OpenSSH y utilizar mecanismos de autenticación seguros."
         );
     }
 
 
+    // =====================================================
+    // EVITAR PUNTAJES MAYORES A 100
+    // =====================================================
+
+    if (puntaje > 100) {
+
+        puntaje = 100;
+    }
+
+
     return {
+
         puntaje: puntaje,
+
         recomendaciones: recomendaciones
     };
 }
 
 
+// =====================================================
+// MOSTRAR PUNTAJE
+// =====================================================
+
 function mostrarPuntaje(puntaje) {
 
-    puntajeElemento.textContent = `${puntaje} / 100`;
+    puntajeElemento.textContent =
+        `${puntaje} / 100`;
+
 
     if (puntaje >= 80) {
 
-        puntajeElemento.style.backgroundColor = "#d4edda";
+        puntajeElemento.style.backgroundColor =
+            "#d4edda";
 
     } else if (puntaje >= 50) {
 
-        puntajeElemento.style.backgroundColor = "#fff3cd";
+        puntajeElemento.style.backgroundColor =
+            "#fff3cd";
 
     } else {
 
-        puntajeElemento.style.backgroundColor = "#f8d7da";
+        puntajeElemento.style.backgroundColor =
+            "#f8d7da";
     }
 }
 
 
+// =====================================================
+// MOSTRAR RECOMENDACIONES
+// =====================================================
+
 function mostrarRecomendaciones(recomendaciones) {
 
     recomendacionesElemento.innerHTML = "";
+
 
     if (recomendaciones.length === 0) {
 
@@ -322,14 +486,21 @@ function mostrarRecomendaciones(recomendaciones) {
         return;
     }
 
+
     recomendaciones.forEach(function (texto) {
 
-        const elemento = document.createElement("div");
+        const elemento =
+            document.createElement("div");
 
-        elemento.classList.add("recomendacion");
+        elemento.classList.add(
+            "recomendacion"
+        );
 
-        elemento.textContent = texto;
+        elemento.textContent =
+            texto;
 
-        recomendacionesElemento.appendChild(elemento);
+        recomendacionesElemento.appendChild(
+            elemento
+        );
     });
 }
